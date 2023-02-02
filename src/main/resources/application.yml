@@ -4,6 +4,14 @@ spring:
     port: 5672
     username: test
     password: 1234
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 3s
+          max-attempts: 3
+          max-interval: 10s
+          multiplier: 2
 
 rabbitmq:
   dlx-exchange: dlx.exchange-topic.dlx.v0
