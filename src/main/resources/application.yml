@@ -1,0 +1,10 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: test
+    password: 1234
+
+rabbitmq:
+  dlx-exchange: dlx.exchange-topic.dlx.v0
+  dlx-queue: dlx.queue.dlx.v0
