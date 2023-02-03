@@ -49,7 +49,8 @@ public class TestRabbitConfig {
         return QueueBuilder.durable("test.dlx.queue")
                 .deadLetterExchange(dlxExchangeName)
                 .deadLetterRoutingKey("")
-//                .withArgument("x-dead-letter-exchange", dlxExchangeName)
+//                .ttl(30000)
+                .withArgument("x-dead-letter-exchange", dlxExchangeName)
 //                .withArgument("x-dead-letter-routing-key", "")
                 .build();
     }
