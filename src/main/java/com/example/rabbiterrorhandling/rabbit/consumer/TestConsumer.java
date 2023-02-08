@@ -3,8 +3,9 @@ package com.example.rabbiterrorhandling.rabbit.consumer;
 import com.rabbitmq.client.Channel;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
+import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,24 @@ public class TestConsumer {
                 throw new AmqpRejectAndDontRequeueException(e);
             }
         }
+    }
+
+    @RabbitListener(
+            bindings = @QueueBinding(
+                    exchange = @Exchange(value = "exchange.not.exist", type = ExchangeTypes.FANOUT),
+                    value = @Queue(value = "queue.not.exist", durable = "false", exclusive = "true", autoDelete = "true"
+                            , arguments = {@Argument(name = "x-dead-letter-exchange", value = "test.dlx.exchange")})
+            )
+    )
+    public void testChannel(String messageBody, Channel channel, Message message){
+        System.out.println("messageBody = " + messageBody);
+    }
+
+    @RabbitListener(queuesToDeclare = {@Queue(name = "queue.not.exist2", exclusive = "true",
+            arguments = {@Argument(name = "x-dead-letter-exchange", value = "dlx.exchange-fanout.dlx.v0")})}
+    )
+    public void testChannel2(String messageBody, Channel channel, Message message) throws IOException {
+        System.out.println("messageBody = " + messageBody);
     }
 
 }
